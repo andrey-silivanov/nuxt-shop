@@ -15,15 +15,55 @@ module.exports = {
         integrity: "sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm", crossorigin: "anonymous"}
     ],
     script: [
-      { src: "https://code.jquery.com/jquery-3.2.1.slim.min.js", integrity: "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN", crossorigin: "anonymous"},
-      { src: "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js", integrity: "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q", crossorigin: "anonymous" },
-      { src: "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js", integrity: "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl", crossorigin: "anonymous" },
+      { src: "~assets/vendor/jquery/jquery-3.2.1.min.js" },
+      { src: "~assets/vendor/animsition/js/animsition.min.js" },
+      { src: "~assets/vendor/bootstrap/js/popper.js" },
+      { src: "~assets/vendor/bootstrap/js/bootstrap.min.js" },
+      { src: "~assets/vendor/select2/select2.min.js" },
+
+
+      { src: "~assets/vendor/daterangepicker/moment.min.js" },
+      { src: "~assets/vendor/daterangepicker/daterangepicker.js" },
+      { src: "~assets/vendor/slick/slick.min.js" },
+      { src: "~assets/js/slick-custom.js" },
+      { src: "~assets/vendor/parallax100/parallax100.js" },
+
+
+
+
+      { src: "~assets/vendor/MagnificPopup/jquery.magnific-popup.min.js" },
+
+
+
+      { src: "~assets/vendor/isotope/isotope.pkgd.min.js" },
+      { src: "~assets/vendor/sweetalert/sweetalert.min.js" },
+
+
+
+      { src: "~assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js" },
+
+
+      { src: "~assets/js/main.js" },
     ]
-  },
+
+},
 
   css: [
+    { src: "~assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css" },
+    { src: "~assets/fonts/iconic/css/material-design-iconic-font.min.css" },
+    { src: "~assets/fonts/linearicons-v1.0.0/icon-font.min.css" },
+    { src: "~assets/vendor/animate/animate.css" },
+    { src: "~assets/vendor/css-hamburgers/hamburgers.min.css" },
+    { src: "~assets/vendor/animsition/css/animsition.min.css" },
+    { src: "~assets/vendor/select2/select2.min.css" },
+    { src: "~assets/vendor/daterangepicker/daterangepicker.css" },
+    { src: "~assets/vendor/slick/slick.css" },
+    { src: "~assets/vendor/MagnificPopup/magnific-popup.css" },
+    { src: "~assets/vendor/perfect-scrollbar/perfect-scrollbar.css" },
+    { src: '~assets/sass/util.scss', lang: 'sass' },
     { src: '~assets/sass/main.scss', lang: 'sass' }
   ],
+
   /*
   ** Customize the progress bar color
   */
