@@ -717,8 +717,10 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 [ Menu mobile ]*/
 .menu-mobile {
   width: 100%;
+  //height: 0;
+
+  overflow:hidden;
   background-color: white;
-  display: none;
 }
 
 .main-menu-m {
@@ -792,12 +794,6 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 .sub-menu-m a:hover {
   text-decoration: none;
   color: #555555;
-}
-
-@media (min-width: 992px){
-  .menu-mobile {
-    display: none;
-  }
 }
 
 
