@@ -3,13 +3,14 @@
     <header>
         <!-- Header desktop -->
         <div class="container-menu-desktop">
+            <!-- Topbar -->
 
             <div class="wrap-menu-desktop">
                 <nav class="limiter-menu-desktop container">
 
                     <!-- Logo desktop -->
                     <a href="#" class="logo">
-                        <img src="~/assets/images/icons/logo-01.png" alt="IMG-LOGO">
+                        <img src="~assets/images/icons/logo-01.png" alt="IMG-LOGO">
                     </a>
 
                     <!-- Menu desktop -->
