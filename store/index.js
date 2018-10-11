@@ -7,7 +7,9 @@ const store = () => new Vuex.Store({
 	
 	state: {
 		showModalCart: false,
-		showModalSearch: false
+		showModalSearch: false,
+
+		products: []
 	},
 	
 	/*
@@ -17,6 +19,8 @@ const store = () => new Vuex.Store({
 		showModalCart: state => state.showModalCart,
 		
 		showModalSearch: state => state.showModalSearch,
+		
+		products: state => state.products,
 	},
 	
 	/*
@@ -29,6 +33,10 @@ const store = () => new Vuex.Store({
 		
 		toggleModalSearch (state) {
 			state.showModalSearch = !state.showModalSearch
+		},
+
+		getProducts (state, value) {
+			state.products = value
 		}
 	},
 	
@@ -42,6 +50,13 @@ const store = () => new Vuex.Store({
 		
 		toggleModalSearch (context) {
 			context.commit('toggleModalSearch');
+		},
+
+		fetchProducts(context) {
+			this.$axios.get('/products').then(
+				response => context.commit('getProducts', response.data.data),
+				error => console.log('n'),
+			)
 		}
 	}
 });

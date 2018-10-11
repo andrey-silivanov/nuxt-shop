@@ -14,6 +14,9 @@
     components: {
       AppHeader,
       AppFooter
+    },
+    created() {
+      this.$store.dispatch('fetchProducts');
     }
   }
 </script>
