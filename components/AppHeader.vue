@@ -49,7 +49,7 @@
 
                     <!-- Icon header -->
                     <div class="wrap-icon-header flex-w flex-r-m">
-                        <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
+                        <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search" @click="$store.dispatch('toggleModalSearch')">
                             <i class="zmdi zmdi-search"></i>
                         </div>
 
@@ -74,7 +74,7 @@
 
             <!-- Icon header -->
             <div class="wrap-icon-header flex-w flex-r-m m-r-15">
-                <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
+                <div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search" @click="$store.dispatch('toggleModalSearch')">
                     <i class="zmdi zmdi-search"></i>
                 </div>
 
@@ -163,28 +163,25 @@
         </div>
         </transition>
         <!-- Modal Search -->
-        <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
-            <div class="container-search-header">
-                <button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-                    <img src="~assets/images/icons/icon-close2.png" alt="CLOSE">
-                </button>
-
-                <form class="wrap-search-header flex-w p-l-15">
-                    <button class="flex-c-m trans-04">
-                        <i class="zmdi zmdi-search"></i>
-                    </button>
-                    <input class="plh3" type="text" name="search" placeholder="Search...">
-                </form>
-            </div>
-        </div>
+        <modal-search/>
+        <!-- Cart -->
+        <modal-cart/>
     </header>
+
 </template>
 
 <script type="text/babel">
+    import ModalCart from '~/components/ModalCart'
+    import ModalSearch from '~/components/ModalSearch'
+
     export default {
         data:() => ({
             mobileOpen: false
-        })
+        }),
+        components: {
+            ModalCart,
+            ModalSearch
+        }
     }
 </script>
 <style>
