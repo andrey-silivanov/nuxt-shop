@@ -1,4 +1,5 @@
 module.exports = {
+
   /*
   ** Headers of the page
   */
@@ -61,7 +62,18 @@ module.exports = {
   },
 
   plugins: [
-    { src: '~/plugins/VueFlickity.js', ssr: false }
-  ]
+    { src: '~/plugins/VueFlickity.js', ssr: false },
+  ],
+
+  modules: [
+    '@nuxtjs/axios',
+  ],
+
+  axios: {
+    baseURL: 'http://nuxt-back/api',
+    proxyHeaders: false,
+    credentials: false
+  }
+
 }
 

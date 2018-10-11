@@ -772,6 +772,14 @@
         </div>
     </section>
 </template>
-<script>
+<script type="text/babel">
 
+    export default {
+        created() {
+            this.$axios.get('/products').then(
+                    response => console.log('y'),
+                    error => console.log('n'),
+            )
+        }
+    }
 </script>
