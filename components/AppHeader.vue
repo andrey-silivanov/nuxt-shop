@@ -97,8 +97,8 @@
 
 
         <!-- Menu Mobile -->
-        <transition name="fade-height">
-            <div class="menu-mobile"  v-if="mobileOpen">
+        <transition name="slide-toggle">
+            <div class="menu-mobile" v-if="mobileOpen">
             <!--<ul class="topbar-mobile">
                 <li>
                     <div class="left-top-bar">
@@ -186,18 +186,20 @@
             mobileOpen: false
         })
     }
-    ///// https://laracasts.com/discuss/channels/vue/vue-20-height-transition
 </script>
 <style>
-    .fadeHeight-enter-active,
-    .fadeHeight-leave-active {
-        transition: all 1500ms ease-out;
-        max-height: 230px;
+    .slide-toggle-enter-active,
+    .slide-toggle-leave-active {
+        transition: height .5s;
     }
-    .fadeHeight-enter,
-    .fadeHeight-leave-to
-    {
-        opacity: 0;
-        max-height: 0;
+    .slide-toggle-enter-active {
+        height: 254px;
+    }
+    .slide-toggle-enter,
+    .slide-toggle-leave-active {
+        height: 0;
+    }
+    .slide-toggle-leave {
+        height: 254px;
     }
 </style>

@@ -88,7 +88,7 @@
             return {
                 flickityOptions: {
                     initialIndex: 3,
-                    prevNextButtons: true,
+                    prevNextButtons: false,
                     pageDots: false,
                     wrapAround: true,
                     autoPlay: 3000,
