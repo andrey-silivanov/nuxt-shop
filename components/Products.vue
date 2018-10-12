@@ -249,14 +249,16 @@
                 </div>
             </div>
 
-            <div class="row isotope-grid">
-                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" v-for="product in products">
+
+            <transition-group name="list" tag="div" class="row isotope-grid">
+                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" v-for="product in listProducts" :key="product.id">
                     <!-- Block2 -->
                     <div class="block2">
                         <div class="block2-pic hov-img0">
                             <img :src="product.image" alt="IMG-PRODUCT">
 
-                            <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                            <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"
+                                @click.prevent="previewProduct(product)">
                                 Quick View
                             </a>
                         </div>
@@ -281,25 +283,57 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </transition-group>
+
 
             <!-- Load more -->
-            <div class="flex-c-m flex-w w-full p-t-45">
-                <a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
+            <div class="flex-c-m flex-w w-full p-t-45" v-if="showPaginate">
+                <a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04" @click.prevent="loadMoreProducts">
                     Load More
                 </a>
             </div>
         </div>
+        <modal-product></modal-product>
     </section>
 </template>
 <script type="text/babel">
     import { mapGetters } from 'vuex';
+    import ModalProduct from '~/components/ModalProduct'
 
     export default {
+        data: () => ({
+            sizePaginate: 8
+        }),
+        components: {
+          ModalProduct
+        },
         computed: {
             ...mapGetters([
                  'products'
-            ])
+            ]),
+            showPaginate() {
+              return this.sizePaginate < this.products.length;
+            },
+            listProducts() {
+                return this.products.slice(0, this.sizePaginate);
+            }
+        },
+        methods: {
+            loadMoreProducts() {
+                this.sizePaginate += this.sizePaginate
+            },
+            previewProduct(product) {
+                this.$store.dispatch('getModalProduct', product);
+            }
         }
     }
 </script>
+<style>
+    .list-enter-active, .list-leave-active {
+        transition: all 1s;
+    }
+    .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+</style>
