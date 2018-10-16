@@ -67,12 +67,19 @@ module.exports = {
 
   modules: [
     '@nuxtjs/axios',
+    ['@nuxtjs/pwa', { icon: false }],
   ],
 
   axios: {
     baseURL: 'http://nuxt-back/api',
     proxyHeaders: false,
     credentials: false
+  },
+  
+  workbox: {
+    importScripts: [
+      'custom-sw.js'
+    ],
   }
 
 }
