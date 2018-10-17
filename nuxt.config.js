@@ -78,6 +78,7 @@ module.exports = {
   
   workbox: {
     importScripts: [
+      '/libs/idb.js',
       'custom-sw.js'
     ],
   }

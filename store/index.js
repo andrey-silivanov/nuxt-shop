@@ -71,7 +71,10 @@ const store = () => new Vuex.Store({
 
 		fetchProducts(context) {
 			this.$axios.get('/products').then(
-				response => context.commit('getProducts', response.data.data),
+				response => {
+					console.log(response);
+					context.commit('getProducts', response.data.data)
+				},
 				error => console.log('error products'),
 			)
 		},
