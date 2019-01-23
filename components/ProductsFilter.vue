@@ -49,7 +49,7 @@
                     </button>
 
                     <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product"
-                           placeholder="Search">
+                           placeholder="Search" v-model="payloadProduct.search" @input="searchProduct">
                 </div>
             </div>
         </transition>
@@ -111,7 +111,8 @@
             payloadProduct: {
                 categoryId: 0,
                 colorId: 0,
-                tagId: ''
+                tagId: '',
+                search: ''
             }
         }),
         computed: {
@@ -154,6 +155,12 @@
             selectTag(value) {
                 this.payloadProduct.tagId = value;
                 this.getProducts()
+            },
+            searchProduct() {
+                console.log(this.payloadProduct.search);
+              if(this.payloadProduct.search.length > 3 &&
+                  this.payloadProduct.search.length % 2 === 0 ||
+                  this.payloadProduct.search.length === 0) this.getProducts()
             },
             getProducts()
             {
