@@ -4,86 +4,186 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 const store = () => new Vuex.Store({
-	
-	state: {
-		showModalCart: false,
-		showModalSearch: false,
-		showModalProduct: false,
-		products: [],
-		modalProduct: {}
-	},
-	
-	/*
-	 * Getters 
-	 */
-	getters: {
-		showModalCart: state => state.showModalCart,
-		
-		showModalSearch: state => state.showModalSearch,
 
-		showModalProduct: state => state.showModalProduct,
+    state: {
+        showModalCart: false,
+        showModalSearch: false,
+        showModalProduct: false,
+        products: [],
+        categories: [],
+        brands: [],
+        phoneModels: [],
+        colors: [],
+        tags: [],
+        selectedBrand: 0,
+        selectedPhoneModel: 0,
+        modalProduct: {}
+    },
 
-		products: state => state.products,
+    /*
+     * Getters
+     */
+    getters: {
+        showModalCart: state => state.showModalCart,
 
-		modalProduct: state => state.modalProduct,
-	},
-	
-	/*
-	 * Mutations 
-	 */
-	mutations: {
-		toggleModalCart (state) {
-			state.showModalCart = !state.showModalCart
-		},
-		
-		toggleModalSearch (state) {
-			state.showModalSearch = !state.showModalSearch
-		},
+        showModalSearch: state => state.showModalSearch,
 
-		toggleModalProduct(state) {
-			state.showModalProduct = !state.showModalProduct
-		},
+        showModalProduct: state => state.showModalProduct,
 
-		getProducts (state, value) {
-			state.products = value
-		},
+        products: state => state.products,
 
-		getModalProduct (state, value) {
-			state.modalProduct = value
-		}
-	},
-	
-	/*
-	 * Actions 
-	 */
-	actions: {
-		toggleModalCart (context) {
-			context.commit('toggleModalCart');
-		},
-		
-		toggleModalSearch (context) {
-			context.commit('toggleModalSearch');
-		},
+        categories: state => state.categories,
 
-		toggleModalProduct (context) {
-			context.commit('toggleModalProduct');
-		},
+        modalProduct: state => state.modalProduct,
 
-		fetchProducts(context) {
-			this.$axios.get('/products').then(
-				response => {
-					console.log(response);
-					context.commit('getProducts', response.data.data)
-				},
-				error => console.log('error products'),
-			)
-		},
+        brands: state => state.brands,
 
-		getModalProduct(context, payload) {
-			context.commit('toggleModalProduct');
-			context.commit('getModalProduct', payload);
-		}
-	}
+        phoneModels: state => state.phoneModels,
+
+        colors: state => state.colors,
+
+        tags: state => state.tags,
+
+        selectedBrand: state => state.selectedBrand,
+
+        selectedPhoneModel: state => state.selectedPhoneModel
+    },
+
+    /*
+     * Mutations
+     */
+    mutations: {
+        toggleModalCart(state) {
+            state.showModalCart = !state.showModalCart
+        },
+
+        toggleModalSearch(state) {
+            state.showModalSearch = !state.showModalSearch
+        },
+
+        toggleModalProduct(state) {
+            state.showModalProduct = !state.showModalProduct
+        },
+
+        getProducts(state, value) {
+            state.products = value
+        },
+
+        getCategories(state, value) {
+            state.categories = value;
+        },
+
+        getBrands(state, value) {
+            state.brands = value
+        },
+
+        getPhoneModels(state, value) {
+            state.phoneModels = value
+        },
+
+        getColors(state, value) {
+            state.colors = value
+        },
+
+        getTags(state, value) {
+            state.tags = value
+        },
+
+        getModalProduct(state, value) {
+            state.modalProduct = value
+        },
+
+        selectBrand(state, value) {
+            state.selectedBrand = value
+        },
+
+        selectPhoneModel(state, value) {
+            state.selectedPhoneModel = value
+        }
+    },
+
+    /*
+     * Actions
+     */
+    actions: {
+        fetchProducts(context, payload = null) {
+            let queryParams = {
+                params: {
+                        page: (payload !== null && payload.page !== null) ? payload.page : '',
+                        categoryId: (payload !== null && payload.categoryId !== null) ? payload.categoryId : '',
+                        phoneModelId: context.state.selectedPhoneModel,
+                        colorId: (payload !== null && payload.colorId !== null) ? payload.colorId : '',
+                        tagId: (payload !== null && payload.tagId !== null) ? payload.tagId : '',
+                        search: (payload !== null && payload.search !== null) ? payload.search : ''
+                }
+            };
+            this.$axios.get('/products', queryParams).then(
+                response => context.commit('getProducts', response.data.data),
+                () => console.log('error products'),
+            )
+        },
+
+        fetchCategories(context) {
+            this.$axios.get('/categories').then(
+                response => context.commit('getCategories', response.data.data),
+                () => console.log('error categories')
+            )
+        },
+
+        fetchBrands(context) {
+            this.$axios.get('/brands').then(
+                response => context.commit('getBrands', response.data.data),
+                () => console.log('error brands')
+            )
+        },
+
+        fetchPhoneModels(context) {
+            this.$axios.get(`/phone-models`,  {params: {brandId: context.state.selectedBrand}}).then(
+                response => context.commit('getPhoneModels', response.data.data),
+                () => console.log('error phone models')
+            )
+        },
+
+        fetchColors(context) {
+          this.$axios.get('/colors').then(
+              response => context.commit('getColors', response.data.data),
+              () => console.log('error colors')
+          )
+        },
+
+        fetchTags(context) {
+            this.$axios.get('/tags').then(
+                response => context.commit('getTags', response.data.data),
+                () => console.log('error tags')
+            )
+        },
+
+        toggleModalCart(context) {
+            context.commit('toggleModalCart');
+        },
+
+        toggleModalSearch(context) {
+            context.commit('toggleModalSearch');
+        },
+
+        toggleModalProduct(context) {
+            context.commit('toggleModalProduct');
+        },
+
+        getModalProduct(context, payload) {
+            context.commit('getModalProduct', payload);
+        },
+
+        selectBrand(context, payload) {
+            context.commit('selectBrand', payload);
+            context.dispatch('fetchPhoneModels');
+        },
+
+        selectPhoneModel(context, payload) {
+            context.commit('selectPhoneModel', payload);
+            context.dispatch('fetchProducts');
+        }
+    }
 });
 
 export default store

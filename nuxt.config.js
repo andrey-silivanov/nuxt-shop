@@ -71,7 +71,7 @@ module.exports = {
   ],
 
   axios: {
-    baseURL: 'http://nuxt-back/api',
+    baseURL: 'http://nuxt-shop-back/api',
     proxyHeaders: false,
     credentials: false
   },
