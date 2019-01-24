@@ -79,7 +79,6 @@
                 return this.sizePaginate < this.products.length;
             },
             listProducts() {
-                console.log('prod23');
                 console.log(this.products);
                 return this.products.slice(0, this.sizePaginate);
             }

@@ -33,61 +33,34 @@
 
                                 <!--  -->
                                 <div class="p-t-33">
-                                  <!--  <div class="flex-w flex-r-m p-b-10">
-                                        <div class="size-203 flex-c-m respon6">
-                                            Brand
-                                        </div>
-
-                                        <div class="size-204 respon6-next">
-                                            <div class="rs1-select2 bor8 bg0">
-                                                <select class="js-select2 form-control" name="time">
-                                                    <option>Choose an option</option>
-                                                    <option>Size S</option>
-                                                    <option>Size M</option>
-                                                    <option>Size L</option>
-                                                    <option>Size XL</option>
-                                                </select>
-                                                <div class="dropDownSelect2"></div>
-                                            </div>
-                                        </div>
+                                    <div class="total-amount flex-c-m stext-101 ">
+                                        <strong>Total: </strong> {{ amountProduct }}
                                     </div>
-
                                     <div class="flex-w flex-r-m p-b-10">
-                                        <div class="size-203 flex-c-m respon6">
-                                            Phone model
-                                        </div>
+                                        <div class="flex-w flex-m respon6-next">
 
-                                        <div class="size-204 respon6-next">
-                                            <div class="rs1-select2 bor8 bg0">
-                                                <select @change="test" v-model="selectedColor"
-                                                        class="js-select2 form-control" name="time">
-                                                    <option v-for="product in modalProduct.products" :value="product"
-                                                            :key="product.id">
-                                                        {{ product.color }}
-                                                    </option>
-                                                </select>
-                                                <div class="dropDownSelect2"></div>
-                                            </div>
-                                        </div>
-                                    </div>-->
-
-                                    <div class="flex-w flex-r-m p-b-10">
-                                        <div class="size-204 flex-w flex-m respon6-next">
                                             <div class="wrap-num-product flex-w m-r-20 m-tb-10">
-                                                <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                                <div @click="decrementProduct"
+                                                     class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                                     <i class="fs-16 zmdi zmdi-minus"></i>
                                                 </div>
 
                                                 <input class="mtext-104 cl3 txt-center num-product" type="number"
-                                                       name="num-product" value="1">
+                                                       name="num-product" :value="modalProduct.count">
 
-                                                <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                                <div @click="incrementProduct"
+                                                     class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                     <i class="fs-16 zmdi zmdi-plus"></i>
                                                 </div>
                                             </div>
 
-                                            <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                            <button @click="addProductToCart" v-if="!modalProduct.isAddedToCart"
+                                                    class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
                                                 Add to cart
+                                            </button>
+                                            <button @click="removeProductFromCart" v-else
+                                                    class="flex-c-m stext-101 cl0 size-101 bg3 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                                Remove
                                             </button>
                                         </div>
                                     </div>
@@ -133,48 +106,29 @@
     export default {
         data: () => ({
             preview: "",
-            selectedColor: ""
+            selectedColor: "",
         }),
         computed: {
             ...mapGetters([
                 'showModalProduct',
                 'modalProduct'
             ]),
-        },
-        watch: {
-            modalProduct(value) {
-                console.log(this.modalProduct.products);
-                console.log('AAAaaaa1');
-                let result = [];
-                /*let unique = this.modalProduct.products.filter(item => {
-                   console.log('item');
-                   console.log(item);
-                   console.log(result)
-                    result.push(item)
-                });
-                console.log(unique)*/
-                // this.preview = value.mainProduct.preview
+            amountProduct() {
+                return this.modalProduct.price * this.modalProduct.count
             }
-        },
-        mounted() {
-            console.log(this.modalProduct)
-            if (this.modalProduct.products) {
-
-            }
-
         },
         methods: {
-            selectPreview(image) {
-                this.preview = image
+            addProductToCart() {
+                this.$store.dispatch('addProductToCart', this.modalProduct)
             },
-            test(product) {
-                console.log('ssdsadadas333')
-                console.log(product)
-                let modalProduct = {
-                    mainProduct: this.selectedColor,
-                    products: this.modalProduct.products
-                }
-                this.$store.dispatch('getModalProduct', modalProduct);
+            removeProductFromCart() {
+                this.$store.dispatch('removeProductFromCart', this.modalProduct)
+            },
+            incrementProduct() {
+                this.$store.dispatch('incrementCountProduct', this.modalProduct)
+            },
+            decrementProduct() {
+                this.$store.dispatch('decrementCountProduct', this.modalProduct)
             }
         }
     }
@@ -202,5 +156,13 @@
             width: 80px;
             height: 100px;
         }
+    }
+
+    .total-amount {
+        margin: auto;
+    }
+
+    .wrap-num-product {
+        width: 161px;
     }
 </style>
