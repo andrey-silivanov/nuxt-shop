@@ -9,6 +9,7 @@ const store = () => new Vuex.Store({
         showModalSearch: false,
         showModalProduct: false,
         products: [],
+        cartProducts: [],
         categories: [],
         brands: [],
         phoneModels: [],
@@ -16,7 +17,7 @@ const store = () => new Vuex.Store({
         tags: [],
         selectedBrand: 0,
         selectedPhoneModel: 0,
-        modalProduct: {}
+        product: {}
     },
 
     /*
@@ -33,7 +34,7 @@ const store = () => new Vuex.Store({
 
         categories: state => state.categories,
 
-        modalProduct: state => state.modalProduct,
+        product: state => state.product,
 
         brands: state => state.brands,
 
@@ -47,10 +48,15 @@ const store = () => new Vuex.Store({
 
         selectedPhoneModel: state => state.selectedPhoneModel,
 
-        cartProducts: state => state.products.filter(el => el.isAddedToCart),
+        cartProducts: state => state.cartProducts, //state.products.filter(el => el.isAddedToCart),
 
         countCartProducts: (state, getters) => getters.cartProducts.length,
 
+        productInCart: (state) => (product) => state.cartProducts.some(item => item.id === product.id),
+
+        getProductById: state => id => {
+            return state.products.find(product => product.id == id);
+        },
     },
 
     /*
@@ -73,6 +79,10 @@ const store = () => new Vuex.Store({
             state.products = value
         },
 
+        getCartProducts(state, value) {
+            state.cartProducts = value
+        },
+
         getCategories(state, value) {
             state.categories = value;
         },
@@ -93,8 +103,8 @@ const store = () => new Vuex.Store({
             state.tags = value
         },
 
-        getModalProduct(state, value) {
-            state.modalProduct = value
+        getOneProduct(state, value) {
+            state.product = value
         },
 
         selectBrand(state, value) {
@@ -110,21 +120,46 @@ const store = () => new Vuex.Store({
                 if (obj.id === value.id) state.products[index].count++
             });
         },
+
+        incrementCountCartProduct(state, value) {
+            state.cartProducts.filter((obj, index) => {
+                if (obj.id === value.id) {
+                    state.cartProducts[index].count++;
+                    window.localStorage.setItem('cartProducts', JSON.stringify(state.cartProducts));
+                }
+            });
+        },
+
         decrementCountProduct(state, value) {
             state.products.filter((obj, index) => {
                 if (obj.id === value.id) state.products[index].count--
             });
         },
 
-        addProductToCart(state, product) {
-            state.products.forEach(el => {
-                if (product.id === el.id) el.isAddedToCart = true;
+        decrementCountCartProduct(state, value) {
+            state.cartProducts.filter((obj, index) => {
+                if (obj.id === value.id) {
+                    state.cartProducts[index].count--;
+                    window.localStorage.setItem('cartProducts', JSON.stringify(state.cartProducts));
+                }
             });
         },
+
+        addProductToCart(state, product) {
+            if (!state.cartProducts.some(item => item.id === product.id)) {
+                state.cartProducts.push(product);
+                window.localStorage.setItem('cartProducts', JSON.stringify(state.cartProducts));
+            }
+        },
+
         removeProductFromCart(state, product) {
-            state.products.forEach(el => {
-                if (product.id === el.id) el.isAddedToCart = false;
+            let index = state.cartProducts.findIndex(function (item) {
+                return item.id === product.id;
             });
+            if (index !== -1) {
+                state.cartProducts.splice(index, 1);
+                window.localStorage.setItem('cartProducts', JSON.stringify(state.cartProducts));
+            }
         }
     },
 
@@ -132,100 +167,133 @@ const store = () => new Vuex.Store({
      * Actions
      */
     actions: {
-        fetchProducts(context, payload = null) {
+        fetchProducts({commit, state}, payload = null) {
             let queryParams = {
                 params: {
                     page: (payload !== null && payload.page !== null) ? payload.page : '',
                     categoryId: (payload !== null && payload.categoryId !== null) ? payload.categoryId : '',
-                    phoneModelId: context.state.selectedPhoneModel,
+                    phoneModelId: state.selectedPhoneModel,
                     colorId: (payload !== null && payload.colorId !== null) ? payload.colorId : '',
                     tagId: (payload !== null && payload.tagId !== null) ? payload.tagId : '',
                     search: (payload !== null && payload.search !== null) ? payload.search : ''
                 }
             };
-            this.$axios.get('/products', queryParams).then(
-                response => context.commit('getProducts', response.data.data),
+            return this.$axios.get('/products', queryParams).then(
+                response => {
+                    commit('getProducts', response.data.data);
+                    return Promise.resolve('PRODUCTS');
+                },
                 () => console.log('error products'),
-            )
+            );
         },
 
-        fetchCategories(context) {
-            this.$axios.get('/categories').then(
-                response => context.commit('getCategories', response.data.data),
+        fetchCartProducts({commit}) {
+                let value = [],
+                    localStorage = window.localStorage.getItem('cartProducts');
+                if (localStorage) value = JSON.parse(localStorage);
+
+                commit('getCartProducts', value)
+        },
+
+        fetchCategories({commit}) {
+            return this.$axios.get('/categories').then(
+                response => {
+                    commit('getCategories', response.data.data);
+                    return Promise.resolve('CATEGORIES');
+                },
                 () => console.log('error categories')
             )
         },
 
-        fetchBrands(context) {
-            this.$axios.get('/brands').then(
-                response => context.commit('getBrands', response.data.data),
-                () => console.log('error brands')
+        fetchBrands({commit}) {
+            return this.$axios.get('/brands').then(
+                response => {
+                    commit('getBrands', response.data.data);
+                    return Promise.resolve('BRANDS');
+                }, () => console.log('error brands')
             )
         },
 
-        fetchPhoneModels(context) {
-            this.$axios.get(`/phone-models`, {params: {brandId: context.state.selectedBrand}}).then(
-                response => context.commit('getPhoneModels', response.data.data),
+        fetchPhoneModels({commit, state}) {
+            this.$axios.get(`/phone-models`, {params: {brandId: state.selectedBrand}}).then(
+                response => {
+                    commit('getPhoneModels', response.data.data);
+                    return Promise.resolve('PHONE_MODELS')
+                },
                 () => console.log('error phone models')
             )
         },
 
-        fetchColors(context) {
-            this.$axios.get('/colors').then(
-                response => context.commit('getColors', response.data.data),
+        fetchColors({commit}) {
+            return this.$axios.get('/colors').then(
+                response => {
+                    commit('getColors', response.data.data)
+                    return Promise.resolve('COLORS');
+                },
                 () => console.log('error colors')
             )
         },
 
-        fetchTags(context) {
-            this.$axios.get('/tags').then(
-                response => context.commit('getTags', response.data.data),
+        fetchTags({commit}) {
+            return this.$axios.get('/tags').then(
+                response => {
+                    commit('getTags', response.data.data);
+                    return Promise.resolve('TAGS');
+                },
                 () => console.log('error tags')
             )
         },
 
-        toggleModalCart(context) {
-            context.commit('toggleModalCart');
+        toggleModalCart({commit}) {
+            commit('toggleModalCart');
         },
 
-        toggleModalSearch(context) {
-            context.commit('toggleModalSearch');
+        toggleModalSearch({commit}) {
+            commit('toggleModalSearch');
         },
 
-        toggleModalProduct(context) {
-            context.commit('toggleModalProduct');
+        toggleModalProduct({commit}) {
+            commit('toggleModalProduct');
         },
 
-        getModalProduct(context, payload) {
-            context.commit('getModalProduct', payload);
+        getOneProduct({commit, state, getters}, payload) {
+            if(getters.productInCart(payload)) {
+                state.cartProducts.filter((obj, index) => {
+                    if (obj.id === payload.id) commit('getOneProduct', obj);
+                });
+            } else {
+                commit('getOneProduct', payload);
+            }
         },
 
-        selectBrand(context, payload) {
-            context.commit('selectBrand', payload);
-            context.dispatch('fetchPhoneModels');
+        selectBrand({commit, dispatch}, payload) {
+            commit('selectBrand', payload);
+            dispatch('fetchPhoneModels');
         },
 
-        selectPhoneModel(context, payload) {
-            context.commit('selectPhoneModel', payload);
-            context.dispatch('fetchProducts');
+        selectPhoneModel({commit, dispatch}, payload) {
+            commit('selectPhoneModel', payload);
+            dispatch('fetchProducts');
         },
 
-        incrementCountProduct(context, product) {
-            context.commit('incrementCountProduct', product)
+        incrementCountProduct({commit, getters}, product) {
+            if(getters.productInCart(product)) commit('incrementCountCartProduct', product);
+            else commit('incrementCountProduct', product)
         },
 
-        decrementCountProduct(context, product) {
-            context.commit('decrementCountProduct', product)
+        decrementCountProduct({commit, getters}, product) {
+            if(getters.productInCart(product)) commit('decrementCountCartProduct', product);
+            else commit('decrementCountProduct', product)
         },
 
-        addProductToCart(context, payload) {
-            context.commit('addProductToCart', payload);
+        addProductToCart({commit}, payload) {
+            commit('addProductToCart', payload);
         },
 
-        removeProductFromCart(context, payload) {
-            context.commit('removeProductFromCart', payload)
-        }
-    }
+        removeProductFromCart({commit}, payload) {
+            commit('removeProductFromCart', payload)
+        },
+    },
 });
 
 export default store

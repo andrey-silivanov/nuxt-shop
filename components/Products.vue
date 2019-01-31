@@ -24,9 +24,9 @@
 
                         <div class="block2-txt flex-w flex-t p-t-14">
                             <div class="block2-txt-child1 flex-col-l ">
-                                <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                    {{ product.title }}
-                                </a>
+                                <nuxt-link class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6"
+                                           :to="{ name: 'products-id', params: { id: product.id }}">{{ product.title }}
+                                </nuxt-link>
 
                                 <span class="stext-105 cl3">
 									${{ product.price }}
@@ -59,7 +59,7 @@
     </section>
 </template>
 <script type="text/babel">
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
     import ModalProduct from '~/components/ModalProduct'
     import ProductsFilter from '~/components/ProductsFilter'
 
@@ -73,23 +73,26 @@
         },
         computed: {
             ...mapGetters([
-                'products'
+                'products',
             ]),
             showPaginate() {
                 return this.sizePaginate < this.products.length;
             },
             listProducts() {
-                console.log(this.products);
                 return this.products.slice(0, this.sizePaginate);
             }
         },
         methods: {
+            ...mapActions([
+                'toggleModalProduct',
+                'getOneProduct'
+            ]),
             loadMoreProducts() {
                 this.sizePaginate += this.sizePaginate
             },
             previewProduct(product) {
-                this.$store.dispatch('toggleModalProduct');
-                this.$store.dispatch('getModalProduct', product);
+                this.toggleModalProduct();
+                this.getOneProduct(product);
             },
         }
     }

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="showContent">
         <!-- Header -->
         <app-header/>
         <nuxt/>
@@ -9,18 +9,45 @@
 <script>
     import AppHeader from '~/components/AppHeader.vue';
     import AppFooter from '~/components/AppFooter';
+    import {mapActions} from 'vuex'
 
     export default {
+        data: () => ({
+           showContent: false
+        }),
         components: {
             AppHeader,
             AppFooter
         },
         created() {
-            this.$store.dispatch('fetchBrands');
-            this.$store.dispatch('fetchCategories');
-            this.$store.dispatch('fetchProducts');
-            this.$store.dispatch('fetchColors');
-            this.$store.dispatch('fetchTags');
+            this.$nextTick(() => {
+                this.$nuxt.$loading.start();
+                this.showContent = true;
+
+                Promise.all([
+                    this.fetchProducts(),
+                    this.fetchBrands(),
+                    this.fetchCategories(),
+                    this.fetchColors(),
+                    this.fetchTags(),
+                ]).then(result => {
+                    console.log(result);
+                    this.$nuxt.$loading.finish();
+                })
+            });
+        },
+        mounted() {
+            this.fetchCartProducts(); /// created - window is not defined
+        },
+        methods: {
+            ...mapActions([
+                'fetchBrands',
+                'fetchCategories',
+                'fetchProducts',
+                'fetchColors',
+                'fetchTags',
+                'fetchCartProducts'
+            ])
         }
     }
 </script>

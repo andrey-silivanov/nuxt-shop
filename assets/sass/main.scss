@@ -112,6 +112,9 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 
 /*//////////////////////////////////////////////////////////////////
 [ LOADDING ]*/
+body {
+  overflow: hidden;
+}
 .animsition-loading-1 {
   position: absolute;
   top: 50%;

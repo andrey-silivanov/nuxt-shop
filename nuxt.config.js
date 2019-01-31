@@ -1,5 +1,13 @@
 module.exports = {
-
+    router: {
+        extendRoutes (routes, resolve) {
+            routes.push({
+                name: 'custom',
+                path: '*',
+                component: resolve(__dirname, 'pages/404.vue')
+            })
+        }
+    },
   /*
   ** Headers of the page
   */
@@ -41,7 +49,7 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
-  loading: { color: '#3B8070' },
+    loading: 'components/Loading.vue',
   /*
   ** Build configuration
   */
@@ -62,6 +70,7 @@ module.exports = {
   },
 
   plugins: [
+      {src: '~/plugins/axios'},
     { src: '~/plugins/VueFlickity.js', ssr: false },
   ],
 

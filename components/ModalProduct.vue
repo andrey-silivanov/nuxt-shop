@@ -7,28 +7,28 @@
             <div class="container">
                 <div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent">
                     <button class="how-pos3 hov3 trans-04 js-hide-modal1"
-                            @click.prevent="$store.dispatch('toggleModalProduct')">
+                            @click.prevent="toggleModalProduct">
                         <img src="~assets/images/icons/icon-close.png" alt="CLOSE">
                     </button>
 
                     <div class="row">
                         <div class="col-md-6 col-lg-7 p-b-30">
                             <div class="row h-100 justify-content-center align-items-center">
-                                <img :src="modalProduct.image" alt="IMG-PRODUCT">
+                                <img :src="product.image" alt="IMG-PRODUCT">
                             </div>
                         </div>
 
                         <div class="col-md-6 col-lg-5 p-b-30">
                             <div class="p-r-50 p-t-5 p-lr-0-lg">
                                 <h4 class="mtext-105 cl2 js-name-detail p-b-14">
-                                    {{ modalProduct.name }}
+                                    {{ product.name }}
                                 </h4>
                                 <span class="mtext-106 cl2">
-								<strong>Price: </strong>{{ modalProduct.price }}
+								<strong>Price: </strong>{{ product.price }}
 							</span>
 
                                 <p class="stext-102 cl3 p-t-23">
-                                    {{ modalProduct.description }}
+                                    {{ product.description }}
                                 </p>
 
                                 <!--  -->
@@ -40,25 +40,25 @@
                                         <div class="flex-w flex-m respon6-next">
 
                                             <div class="wrap-num-product flex-w m-r-20 m-tb-10">
-                                                <div @click="decrementProduct"
+                                                <div @click="decrementCountProduct(product)"
                                                      class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                                     <i class="fs-16 zmdi zmdi-minus"></i>
                                                 </div>
 
                                                 <input class="mtext-104 cl3 txt-center num-product" type="number"
-                                                       name="num-product" :value="modalProduct.count">
+                                                       name="num-product" :value="product.count">
 
-                                                <div @click="incrementProduct"
+                                                <div @click="incrementCountProduct(product)"
                                                      class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                     <i class="fs-16 zmdi zmdi-plus"></i>
                                                 </div>
                                             </div>
 
-                                            <button @click="addProductToCart" v-if="!modalProduct.isAddedToCart"
+                                            <button @click="addProductToCart(product)" v-if="!showCartButton"
                                                     class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
                                                 Add to cart
                                             </button>
-                                            <button @click="removeProductFromCart" v-else
+                                            <button @click="removeProductFromCart(product)" v-else
                                                     class="flex-c-m stext-101 cl0 size-101 bg3 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
                                                 Remove
                                             </button>
@@ -101,35 +101,30 @@
 </template>
 
 <script type="text/babel">
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
 
     export default {
-        data: () => ({
-            preview: "",
-            selectedColor: "",
-        }),
         computed: {
             ...mapGetters([
                 'showModalProduct',
-                'modalProduct'
+                'product',
+                'productInCart'
             ]),
+            showCartButton() {
+                return this.productInCart(this.product)
+            },
             amountProduct() {
-                return this.modalProduct.price * this.modalProduct.count
+                return this.product.price * this.product.count
             }
         },
         methods: {
-            addProductToCart() {
-                this.$store.dispatch('addProductToCart', this.modalProduct)
-            },
-            removeProductFromCart() {
-                this.$store.dispatch('removeProductFromCart', this.modalProduct)
-            },
-            incrementProduct() {
-                this.$store.dispatch('incrementCountProduct', this.modalProduct)
-            },
-            decrementProduct() {
-                this.$store.dispatch('decrementCountProduct', this.modalProduct)
-            }
+            ...mapActions([
+                'toggleModalProduct',
+                'addProductToCart',
+                'removeProductFromCart',
+                'incrementCountProduct',
+                'decrementCountProduct'
+            ]),
         }
     }
 </script>
