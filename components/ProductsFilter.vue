@@ -1,6 +1,6 @@
 <template>
     <div class="flex-w flex-sb-m p-b-52">
-        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35">
+        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 filter-block-brand">
             <label class="my-1 mr-2" for="brand">Brand</label>
             <select class="custom-select my-1 mr-sm-2" v-model="activeBrand" id="brand" @change="changeBrand">
                 <option value="0">Choose...</option>
@@ -24,7 +24,7 @@
             </select>
         </div>
 
-        <div class="flex-w flex-c-m m-tb-10">
+        <div class="flex-w flex-c-m m-tb-10 filter-block-button">
             <div @click="toggleFilter"
                  class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
                 <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
@@ -179,7 +179,22 @@
     .js-show-filter, .js-show-search {
         margin-bottom: 5px;
     }
-
+    .filter-block-brand {
+        padding-left: 0;
+    }
+    @media (max-width: 767px) {
+        .filter-block-brand {
+            padding-left: 15px;
+        }
+        .filter-block-button {
+            padding-right: 15px;
+        }
+    }
+    @media (max-width: 575px) {
+        .filter-block-button {
+            padding-left: 15px;
+        }
+    }
     .filter-link {
         color: #000000;
     }

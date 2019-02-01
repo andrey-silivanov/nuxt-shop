@@ -1,5 +1,6 @@
 module.exports = {
     router: {
+        linkActiveClass: 'active-menu',
         extendRoutes (routes, resolve) {
             routes.push({
                 name: 'custom',
