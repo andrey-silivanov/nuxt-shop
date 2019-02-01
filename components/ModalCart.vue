@@ -54,7 +54,7 @@
     </transition>
 </template>
 <script type="text/babel">
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
         computed: {
@@ -70,6 +70,10 @@
             }
         },
         methods: {
+            ...mapActions([
+                'toggleModalProduct',
+                'removeProductFromCart',
+            ]),
             removeProductFromCart(product) {
                 this.$store.dispatch('removeProductFromCart', product)
             },

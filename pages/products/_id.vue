@@ -32,7 +32,11 @@
                                 <div class="flex-w flex-m respon6-next">
 
                                     <div class="wrap-num-product flex-w m-r-20 m-tb-10">
-                                        <div @click="decrementCountProduct(product)"
+                                        <div @click="decrementCountProduct(product)" v-if="product.count > 1"
+                                             class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                            <i class="fs-16 zmdi zmdi-minus"></i>
+                                        </div>
+                                        <div v-else
                                              class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                             <i class="fs-16 zmdi zmdi-minus"></i>
                                         </div>
