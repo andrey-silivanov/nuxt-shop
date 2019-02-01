@@ -108,11 +108,13 @@ const store = () => new Vuex.Store({
         },
 
         selectBrand(state, value) {
-            state.selectedBrand = value
+            state.selectedBrand = value;
+            window.localStorage.setItem('selectedBrand', JSON.stringify(value));
         },
 
         selectPhoneModel(state, value) {
-            state.selectedPhoneModel = value
+            state.selectedPhoneModel = value;
+            window.localStorage.setItem('selectedPhoneModel', JSON.stringify(value));
         },
 
         incrementCountProduct(state, value) {
