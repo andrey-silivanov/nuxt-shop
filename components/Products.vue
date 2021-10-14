@@ -85,7 +85,7 @@
         methods: {
             ...mapActions([
                 'toggleModalProduct',
-                'getOneProduct'
+                'getOneProduct',
             ]),
             loadMoreProducts() {
                 this.sizePaginate += this.sizePaginate

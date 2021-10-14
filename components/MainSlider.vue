@@ -3,7 +3,7 @@
     <no-ssr>
         <flickity ref="flickity" :options="flickityOptions">
             <div class="carousel-cell">
-                <div class="item-slick1" style="background-image: url('https://source.unsplash.com/1600x900/?model,store');">
+                <div class="item-slick1" :style="{ backgroundImage: 'url(' + require(`~/assets/images/slider/1.jpg`) + ')' }">
                     <div class="container h-full">
                         <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
                             <div class="layer-slick1" data-appear="fadeInDown" data-delay="0">
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="carousel-cell">
-                <div class="item-slick1" style="background-image: url('https://source.unsplash.com/1600x900/?model,women');">
+                <div class="item-slick1" :style="{ backgroundImage: 'url(' + require(`~/assets/images/slider/2.jpg`) + ')' }">
                     <div class="container h-full">
                         <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
                             <div class="layer-slick1" data-appear="fadeInDown" data-delay="0">
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="carousel-cell">
-                <div class="item-slick1" style="background-image: url('https://source.unsplash.com/1600x900/?model,bag');">
+                <div class="item-slick1" :style="{ backgroundImage: 'url(' + require(`~/assets/images/slider/3.jpg`) + ')' }">
                     <div class="container h-full">
                         <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
                             <div class="layer-slick1" data-appear="fadeInDown" data-delay="0">
@@ -86,6 +86,7 @@
     export default {
         data() {
             return {
+                sliderItems: '~/assets/images/slider/1.jpg',
                 flickityOptions: {
                     initialIndex: 3,
                     prevNextButtons: false,
